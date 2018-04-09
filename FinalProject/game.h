@@ -9,6 +9,8 @@
 #include "board.h"
 #include "button.h"
 
+//git test
+
 enum class Player {one,two,none};
 
 class Game : public QGraphicsView
