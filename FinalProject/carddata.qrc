@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/new/CardData">
+        <file>Creature Card Ideas - Sheet1.csv</file>
+    </qresource>
+</RCC>

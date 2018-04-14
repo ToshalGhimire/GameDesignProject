@@ -1,0 +1,49 @@
+Mana/Resource,Name,Health,Attack,Movement,Range,Description
+0,Scout,2,1,3,1,Power Tile: Gain +2 Mana/Resource
+1,Barbarian,2,3,1,1,No Description
+1,Wyrmling,1,1,3,1,Power Tile: Gain +3 Attack
+1,Begger ,1,1,2,1,"Power Tile: Choose, draw a card OR gain +1 Mana (Single Use)"
+1,Swordsman,2,2,2,1,No Description
+2,Seeker,2,2,3,2,Power Tile: Spell cards cost 1 Mana less
+2,Novice Ranger,2,1,3,2,Power Tile: Gain +2 Range and +1 Attack
+2,Captian Frog,4,3,3,1,"this card can jump, meaning it can skip over tiles that filled and movemnt speed(3) starts counting from the next tile"
+2,Shield Bearer,4,1,2,1,No Description
+2,Medic,2,2,2,1,Power Tile: Heal a target in a 3 tile radius for 2 health. (Single Use)
+3,Adolesent Dragon,4,3,3,1,No Description
+3,Crazed Barbarian,2,5,4,1,No Description
+3,Ranger,3,2,3,2,Power Tile: Gain +2 Range and +2 Attack
+3,Wizard,4,1,2,2,Power Tile: +1 Spell Power
+4,Arcane Crazed Sergant,5,2,3,1,Power Tile: Give +2 Attack to all friendly creatures in a 1 tile radius.
+4,Dragon Knight,6,2,2,1,Cleave (Attacks hit the primary target as well as the tiles to the left and right of the primary)
+4,Dragon Priest,5,3,2,1,Power Tile: Ressurect a friendly dragon that has died this game. (Single Use)
+4,Persuader,3,2,2,1,"if this card gets within one unit of a enemy scout, he can convert the scout into an aly (Single Use)"
+4,Knight,5,3,2,1,No Description
+5,Dragon Summoner,8,2,2,2,Power Tile: Can summon one dragon from your hand per turn to the Summoners location
+5,Mind Wyrm,4,2,2,1,Power Tile: Take Control of an enemy creature that is also on a power tile
+5,Ogre Thug,5,4,2,1,No Description
+5,Arcane Dragon,2,2,5,1,Power Tile: Gain +5 Attack and +5 Health AND Lose -4 Movement
+5,Fart.....,6,6,3,1,Can make the enviroment smelly and distracting. while farting nobody can use spell.
+5,Plague Ogre,10,1,1,1,Deals one damage to enemy creatures in a one tile radius at the end of each turn.
+5,Rush Rocket,5,2,5,1,High movement card 
+5,Mana Scout ,2,1,3,1,"this card can only be summoned by sacrificing two scouts, one must be in mana tile, + 5 Mana/Resource per turn"
+5,Fatsu ,4,4,2,1,Can jump on target. Target can be damaged.
+5,Holy Priest,4,1,3,1,Heals all friendly targets in a one tile radius at the end of each turn.
+6,Ogre,7,6,3,1,No Description
+6,Frost Dragon,7,4,2,2,Freeze (Attacks root the target in place for one turn)
+6,Laugning ninja,6,6,3,1,Makes target laugh. Can decrease health of target.
+6,lightning bolt dragon,6,6,3,1,strikes nearby target with lightning bolt
+6,Dragon Hunter,6,3,3,3,Gain +5 Attack only when attacking Dragon creatures
+6,Phoenix,4,3,3,1,If this creature dies on a Power Tile resummon it for no cost next turn.
+7,Seige Ballista,8,3,1,6,Long Range
+7,Life Eater,5,3,3,1,"if this card attaks another creature, it gains (attack damage /3 * 1) health"
+7,Bloodied Bezerker,8,4,2,1,Rage +4 (When this creature is below its maximum health gain a certain amount of attack)
+7,Adult Dragon,8,4,2,1,Cleave (Attacks hit the primary target as well as the tiles to the left and right of the primary)
+7,Battle Commander,6,6,3,1,Power Tile: All creatures in a 1 tile radius gain +1 Attack and +1 Health
+8,Lonely Dragon,8,8,2,1,The next dragon you play costs 2 less Mana
+8,Dragon Matron,6,6,2,1,Power Tile: After two turns summon the lowest cost dragon from your hand onto the field.
+8,Bloodlust Dragon,3,4,2,1,can kill if target is injured
+8,Dragon Hoarder,6,7,2,1,"Power Tile: Draw a card, if you have another dragon in your hand draw 2 instead."
+9,Primitive Drake,10,10,3,1,No Description
+9,Xoph,8,4,3,1,Power Tile: Your next two spells are free.
+10,Tul,12,6,2,1,Cleave AND Knockback
+10,Light Cheetah,4,4,0,1,"costs 3 mana to move this creature, can move anywhere on the map but the enemy base"

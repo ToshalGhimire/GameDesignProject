@@ -8,8 +8,11 @@
 
 #include "board.h"
 #include "button.h"
+#include "Cards/deck.h"
+#include "Cards/card.h"
 
-//git test
+class Deck;
+
 
 enum class Player {one,two,none};
 
@@ -33,8 +36,11 @@ public slots:
     void BackToMain();
     void About();
 
+    void Test();
+
 private:
     QMediaPlayer * Music;
+    Deck * testDeck;
 
 };
 

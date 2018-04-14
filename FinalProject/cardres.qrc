@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/new/Cardfile">
+        <file>CardsFile.csv</file>
+    </qresource>
+</RCC>

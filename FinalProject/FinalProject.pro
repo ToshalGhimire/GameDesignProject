@@ -30,15 +30,20 @@ SOURCES += \
     game.cpp \
     tile.cpp \
     board.cpp \
-    button.cpp
+    button.cpp \
+    Cards/card.cpp \
+    Cards/deck.cpp
 
 HEADERS += \
     game.h \
     tile.h \
     board.h \
-    button.h
+    button.h \
+    Cards/card.h \
+    Cards/deck.h
 
 FORMS +=
 
 RESOURCES += \
-    res.qrc
+    res.qrc \
+    cardres.qrc

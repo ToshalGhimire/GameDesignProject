@@ -30,19 +30,5 @@ private:
 };
 
 
-class Hero : public Tile
-{
-public:
-    Hero(state s,QGraphicsItem* parent = NULL);
 
-
-
-private:
-    int movement_ = 2;
-    int attack_ = 2;
-    int health = 3;
-
-    int attackRange_ = 1;
-
-};
 #endif // TILE_H

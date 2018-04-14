@@ -14,14 +14,14 @@ Game::Game(QWidget *parent)
    scene_->setSceneRect(0,0,1024,768);
    setScene(scene_);
 
-   Music = new QMediaPlayer();
+   //Music = new QMediaPlayer(); MUSIC
 
 
 }
 
 void Game::Start()
 {
-    Music->pause();
+    //Music->pause(); MUSIC
 
     scene_->clear();
 
@@ -69,16 +69,31 @@ void Game::About()
 
 }
 
+void Game::Test()
+{
+  scene_->clear();
+
+  testDeck = new Deck();
+
+  testDeck->displayDeck();
+  scene_->addItem(testDeck->Draw());
+  testDeck->displayDeck();
+}
+
 void Game::MainMenu()
 {
-    if(Music->state() == QMediaPlayer::PlayingState){
-        Music->play();
-    }else{
-       Music->setMedia(QUrl("qrc:/Sounds/backgroundMusic"));
-       Music->play();
-       Music->setVolume(10);
 
-    }
+//MUSIC
+//    if(Music->state() == QMediaPlayer::PlayingState){
+//        Music->play();
+//    }else{
+//       Music->setMedia(QUrl("qrc:/Sounds/backgroundMusic"));
+//       Music->play();
+//       Music->setVolume(10);
+
+//    }
+
+
 
    //title
    QGraphicsTextItem * title = new QGraphicsTextItem(QString("Final Project (Title TBD)"
@@ -116,4 +131,16 @@ void Game::MainMenu()
 
    connect(ExitButton,SIGNAL(clicked()),this,SLOT(close()));
    scene_->addItem(ExitButton);
+
+   //Test button
+   Button * TestButton = new Button(QString("Test Code"));
+   int TestPos_X = this->width()/2 - title->boundingRect().width()/2;
+   int TestPos_Y = 490;
+   TestButton->setPos(TestPos_X,TestPos_Y);
+
+   connect(TestButton,SIGNAL(clicked()),this,SLOT(Test()));
+   scene_->addItem(TestButton);
 }
+
+
+

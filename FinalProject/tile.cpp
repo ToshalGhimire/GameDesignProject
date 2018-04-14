@@ -31,13 +31,3 @@ void Tile::setState(state s)
 {
     this->TileState_ = s;
 }
-
-
-
-//====================================Card class==========================================================///
-Hero::Hero(state s, QGraphicsItem *parent)
-{
-    this->setState(state::hero);
-
-
-}

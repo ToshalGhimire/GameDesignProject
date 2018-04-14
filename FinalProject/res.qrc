@@ -2,4 +2,7 @@
     <qresource prefix="/Sounds">
         <file>backgroundMusic</file>
     </qresource>
+    <qresource prefix="/CardData">
+        <file>CreatureCard_Sheet1.csv</file>
+    </qresource>
 </RCC>
