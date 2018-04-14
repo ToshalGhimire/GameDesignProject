@@ -1,2 +1,2 @@
 # GameDesignProject
-Designing/Implementing an original game
+Designing/Implementing an original game Using QT 
