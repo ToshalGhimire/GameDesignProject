@@ -11,6 +11,7 @@
 #include "Cards/deck.h"
 #include "Cards/card.h"
 
+class Card;
 class Deck;
 
 
@@ -36,11 +37,14 @@ public slots:
     void BackToMain();
     void About();
 
+    void draw();
     void Test();
 
 private:
     QMediaPlayer * Music;
     Deck * testDeck;
+
+    QVector<Card*> hand;
 
 };
 

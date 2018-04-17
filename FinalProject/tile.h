@@ -19,8 +19,16 @@ public:
     void setState(state s);
     state getState(){return TileState_;}
 
+    void SetColor();
 
 
+protected:
+    void mousePressEvent(QGraphicsSceneMouseEvent *event)
+    {
+        if(TileState_ == state::spawn){
+            qDebug() << "Spawn item clicked";
+        }
+    }
 
 private:
     state TileState_;

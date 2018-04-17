@@ -69,15 +69,54 @@ void Game::About()
 
 }
 
+//qreal xx = -430;
+//qreal yy = -40;
+
+void Game::draw()
+{
+    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+
+    Card * temp = testDeck->Draw();
+
+    hand.push_back(temp);
+    //temp->setPos(xx,yy);
+    scene_->addItem(temp);
+//    xx += 158;
+
+//    if(xx >= 1350){
+//        xx = -430;
+//        yy += 220;
+//    }
+
+//    for(Card * i : hand){
+
+
+
+
+
+//        scene_->addItem(i);
+//    }
+
+    //testDeck->displayDeck();
+
+}
+
 void Game::Test()
 {
   scene_->clear();
 
+  Button * drawButton = new Button(QString("Draw"));
+  int DrawPos_X = this->width()/2 - drawButton->boundingRect().width()/2;
+  int DrawPos_Y = 370;
+  drawButton->setPos(DrawPos_X,DrawPos_Y);
+  connect(drawButton,SIGNAL(clicked()),this,SLOT(draw()));
+  scene_->addItem(drawButton);
+
+
+
   testDeck = new Deck();
 
-  testDeck->displayDeck();
-  scene_->addItem(testDeck->Draw());
-  testDeck->displayDeck();
+
 }
 
 void Game::MainMenu()

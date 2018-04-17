@@ -18,6 +18,14 @@ Tile::Tile(QGraphicsItem* parent)
     QPolygonF hexagon(hexpoints);
 
     setPolygon(hexagon);
+//    QBrush brush(Qt::lightGray);
+//    brush.setStyle(Qt::SolidPattern);
+
+    setBrush(Qt::lightGray);
+
+
+
+
 }
 
 void Tile::SwapStates(Tile &t)
@@ -30,4 +38,42 @@ void Tile::SwapStates(Tile &t)
 void Tile::setState(state s)
 {
     this->TileState_ = s;
+
+    SetColor();
 }
+
+void Tile::SetColor()
+{
+
+    if(this->TileState_ == state::spawn){
+
+
+        setPen(QPen(Qt::green));
+
+        QBrush brush(Qt::gray);
+        brush.setStyle(Qt::SolidPattern);
+
+        setBrush(brush);
+
+        QGraphicsTextItem * SpawnText = new QGraphicsTextItem(this);
+        SpawnText->setPlainText(QString("S"));
+        QFont titlefont("impact",40);
+        SpawnText->setDefaultTextColor(Qt::darkGray);
+        SpawnText->setFont(titlefont);
+        SpawnText->setPos(this->boundingRect().x() + 40, this->boundingRect().y()-10);
+    }
+}
+
+//void Tile::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+//{
+
+//    painter->setPen(Qt::darkBlue);
+//    QBrush brush(Qt::gray);
+//    QRectF rec = boundingRect();
+
+
+
+//    if(this->TileState_ == state::spawn){
+//        painter->fillRect(rec,brush);
+//    }
+//}

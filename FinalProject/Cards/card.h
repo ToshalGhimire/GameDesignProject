@@ -16,6 +16,12 @@ struct CardData{
     QString description;
 };
 
+struct CardIcons {
+    QImage coins;
+    QImage movement;
+    QImage power;
+};
+
 class Card : public QGraphicsRectItem
 {
 public:
@@ -30,8 +36,17 @@ public:
 
     QPainterPath shape() const;
 
+    void SETPOS(qreal x, qreal y);
+
 private:
     CardData info;
+    CardIcons icon;
+
+    qreal xpos,ypos;
+
+    bool hasMoved_;
+    bool hasAttacked_;
+
 
 };
 

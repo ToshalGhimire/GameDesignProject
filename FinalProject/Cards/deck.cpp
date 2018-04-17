@@ -10,8 +10,9 @@ Deck::Deck()
 {
     std::srand(unsigned(std::time(0)));
 
+    QString myResourceFile = ":/card/CardsFile.csv";
+    QFile file(myResourceFile);
 
-    QFile file("C:/Users/tosha/Desktop/Programing/QT/GameDesignProject/FinalProject/CardsFile.csv");
 
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
         qDebug() << "Error file not opened properly";
@@ -19,7 +20,6 @@ Deck::Deck()
 
     QString Attributes = file.readLine();
 
-    int i = 0;
     CardData temp;
     while(!file.atEnd()){
         QString line = file.readLine();
@@ -35,12 +35,12 @@ Deck::Deck()
 
         deck_.push_back(TempCard);
 
-        i++;
-        if(i == 5) break;
+
 
     }
 
     std::random_shuffle(deck_.begin(),deck_.end()); //suffleing deck
+
 
 
 
@@ -63,7 +63,9 @@ void Deck::Shuffle()
 
 Card * Deck::Draw()
 {
-    Card * out = deck_.takeFirst();
+
+    Card * out;
+    out = deck_.takeFirst();
     return out;
 
 }

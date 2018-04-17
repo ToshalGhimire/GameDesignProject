@@ -25,7 +25,7 @@ void Board::MakeBoard(int xPos, int yPos)
 
     delete OffsetInfo;
 
-    makeTileColumn(xPos,yPos+ySHIFT*4,4);//1st column - index: 0-3
+    makeTileColumn(xPos-2,yPos+ySHIFT*4,4);//1st column - index: 0-3
     makeTileColumn(xPos+xSHIFT,yPos+ySHIFT,7);//2nd column - index: 4-10
 
     makeTileColumn(xPos+xSHIFT*2,yPos,8); //3rd column - index: 11-18
@@ -34,6 +34,18 @@ void Board::MakeBoard(int xPos, int yPos)
 
     makeTileColumn(xPos+xSHIFT*5,yPos+ySHIFT,7); //6th column - index: 36-42
     makeTileColumn(xPos+xSHIFT*6,yPos+ySHIFT*4,4); //7th column - index: 43-46
+
+
+    //seting Spawn points
+
+    boardContainer[0]->setState(state::spawn);
+    boardContainer[1]->setState(state::spawn);
+    boardContainer[2]->setState(state::spawn);
+    boardContainer[3]->setState(state::spawn);
+    boardContainer[43]->setState(state::spawn);
+    boardContainer[44]->setState(state::spawn);
+    boardContainer[45]->setState(state::spawn);
+    boardContainer[46]->setState(state::spawn);
 
 
 }

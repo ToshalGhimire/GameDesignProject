@@ -32,7 +32,8 @@ SOURCES += \
     board.cpp \
     button.cpp \
     Cards/card.cpp \
-    Cards/deck.cpp
+    Cards/deck.cpp \
+    Player/player.cpp
 
 HEADERS += \
     game.h \
@@ -40,10 +41,10 @@ HEADERS += \
     board.h \
     button.h \
     Cards/card.h \
-    Cards/deck.h
+    Cards/deck.h \
+    Player/player.h
 
 FORMS +=
 
 RESOURCES += \
-    res.qrc \
-    cardres.qrc
+    res.qrc
