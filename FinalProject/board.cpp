@@ -1,5 +1,7 @@
 #include "game.h"
 #include "board.h"
+#include <ctime>        // std::time
+
 
 extern Game * game;
 
@@ -36,16 +38,70 @@ void Board::MakeBoard(int xPos, int yPos)
     makeTileColumn(xPos+xSHIFT*6,yPos+ySHIFT*4,4); //7th column - index: 43-46
 
 
-    //seting Spawn points
 
-    boardContainer[0]->setState(state::spawn);
-    boardContainer[1]->setState(state::spawn);
-    boardContainer[2]->setState(state::spawn);
-    boardContainer[3]->setState(state::spawn);
-    boardContainer[43]->setState(state::spawn);
-    boardContainer[44]->setState(state::spawn);
-    boardContainer[45]->setState(state::spawn);
-    boardContainer[46]->setState(state::spawn);
+    setSpawnTiles();//seting Spawn points
+    ResourceTiles();//seting Resource Tiles ResourceTiles(true) = random tiles
+
+    //seting caltapult
+    boardContainer[23]->setZValue(1);
+    boardContainer[23]->setState(state::caltaput);
+
+
+
+}
+
+void Board::setSpawnTiles()
+{
+     boardContainer[0]->setState(state::spawn);
+     boardContainer[1]->setState(state::spawn);
+     boardContainer[2]->setState(state::spawn);
+     boardContainer[3]->setState(state::spawn);
+     boardContainer[43]->setState(state::spawn);
+     boardContainer[44]->setState(state::spawn);
+     boardContainer[45]->setState(state::spawn);
+     boardContainer[46]->setState(state::spawn);
+
+}
+
+void Board::ResourceTiles(bool israndom)
+{
+    std::srand(unsigned(std::time(0)));
+
+    if(israndom){
+        int first = (rand() %2 ) + 11;
+        int second = (rand() %2 ) + 14;
+        int third = (rand() %2 ) + 17;
+
+
+        boardContainer[first]->setState(state::resource_one);
+        boardContainer[second]->setState(state::resource_one);
+        boardContainer[third]->setState(state::resource_one);
+
+
+        boardContainer[first+17]->setState(state::resource_one);
+        boardContainer[second+17]->setState(state::resource_one);
+        boardContainer[third+17]->setState(state::resource_one);
+
+        boardContainer[21]->setState(state::resource_two);
+        boardContainer[25]->setState(state::resource_two);
+
+    }
+    else{
+
+        boardContainer[4]->setState(state::resource_one);
+        boardContainer[10]->setState(state::resource_one);
+        boardContainer[13]->setState(state::resource_one);
+        boardContainer[16]->setState(state::resource_one);
+
+        boardContainer[36]->setState(state::resource_one);
+        boardContainer[42]->setState(state::resource_one);
+        boardContainer[13+17]->setState(state::resource_one);
+        boardContainer[16+17]->setState(state::resource_one);
+
+        boardContainer[20]->setState(state::resource_two);
+        boardContainer[26]->setState(state::resource_two);
+
+    }
 
 
 }
@@ -55,7 +111,7 @@ void Board::makeTileColumn(int x, int y, int row)
     double yOffset;
     for(int i = 0; i < row;i++){
         Tile* temp = new Tile();
-        yOffset = temp->SCALE_BY * (2 * temp->sideOffset);
+        yOffset = temp->SCALE_BY * (2 * temp->sideOffset) + 1;
         temp->setPos(x,y+yOffset*i);
         boardContainer.append(temp);
         game->scene_->addItem(temp);

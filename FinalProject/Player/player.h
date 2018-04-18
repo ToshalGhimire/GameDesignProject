@@ -4,19 +4,29 @@
 #include <QVector>
 
 #include "../Cards/deck.h"
+#include "../Cards/card.h"
 
-
+class Card;
+class Deck;
 
 class Player
 {
 public:
     Player();
 
-private:
+    void DrawCard();
+    void shuffle();
+
+    QString GetHealthInfo();
+
     QVector<Card*> hand_;
+
+private:
     Deck * deck_;
 
-    int health_;
+    int health_[4];
+    int gold_;
+    int heroCount_;
 
 };
 

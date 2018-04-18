@@ -47,13 +47,6 @@ Deck::Deck()
 
 }
 
-void Deck::displayDeck()
-{
-
-    for(auto i : deck_){
-        i->CardStats();
-    }
-}
 
 void Deck::Shuffle()
 {
@@ -64,6 +57,9 @@ void Deck::Shuffle()
 Card * Deck::Draw()
 {
 
+    if(deck_.size() == 0){
+        return NULL;
+    }
     Card * out;
     out = deck_.takeFirst();
     return out;

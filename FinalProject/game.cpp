@@ -1,17 +1,17 @@
 #include "game.h"
 #include "board.h"
+#include "game.h"
 
 Game::Game(QWidget *parent)
 {
-    //set screen
+   //set screen
    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-   setFixedSize(1024,768);
+   setFixedSize(1500,768);
 
    //set scene
-
    scene_ = new QGraphicsScene();
-   scene_->setSceneRect(0,0,1024,768);
+   scene_->setSceneRect(0,0,1500,768);
    setScene(scene_);
 
    //Music = new QMediaPlayer(); MUSIC
@@ -26,19 +26,80 @@ void Game::Start()
     scene_->clear();
 
     GameBoard = new Board();
-    GameBoard->MakeBoard(100,100);
+    GameBoard->MakeBoard(30,50);
 
-    //Back button
-    Button * BackButton = new Button(QString("<- Back"));
+    player_one = new Player();
+    player_two = new Player();
+
+    player_one->shuffle();
+    player_two->shuffle();
+
+    turn = PlayerTurn::one;
+
+    displayScoreBoard();
+
+    //Quit button
+    Button * QuitButton = new Button(QString("Quit"));
     int backPos_X = this->width() - 250;
     int backpos_Y = 100;
-    BackButton->setPos(backPos_X,backpos_Y);
-    scene_->addItem(BackButton);
-    connect(BackButton,SIGNAL(clicked()),this,SLOT(BackToMain()));
+    QuitButton->setPos(20,700);
+    scene_->addItem(QuitButton);
+    connect(QuitButton,SIGNAL(clicked()),this,SLOT(BackToMain()));
+
+    //End Turn button
+    Button * EndTurnButton = new Button(QString("End Turn"));
+    EndTurnButton->setPos(1250,700);
+    scene_->addItem(EndTurnButton);
+    connect(EndTurnButton,SIGNAL(clicked()),this,SLOT(EndTurn()));
+
+    //Draw Button
+    Button * drawButton = new Button(QString("Draw"));
+    drawButton->setPos(1025,700);
+    connect(drawButton,SIGNAL(clicked()),this,SLOT(draw()));
+    scene_->addItem(drawButton);
+
+
+    QString filename = ":/card/Coins.png";
+    QImage image(filename);
+
+    QGraphicsPixmapItem * item = new QGraphicsPixmapItem(QPixmap::fromImage(image));
+    item->setPos(700,620);
+    scene_->addItem(item);
+
+
+}
+
+void Game::displayScoreBoard(){
+
+    QString p1 = player_one->GetHealthInfo();
+    QString p2 = player_two->GetHealthInfo();
+
+    QString turnString;
+    if(turn == PlayerTurn::one){
+        turnString = QString("Player 1 Turn");
+    }else if(turn == PlayerTurn::two){
+        turnString = QString("Player 2 Turn");
+    }else {
+        turnString = QString("No One's Turn");
+    }
+
+    QString score = QString(p1 + " | " + turnString + " | " + p2);
+
+    scene_->removeItem(scoreBoard);
+    scoreBoard = new QGraphicsTextItem(score);
+    QFont scoreFont("impact",20);
+    scoreBoard->setFont(scoreFont);
+    scene_->addItem(scoreBoard);
+
+    scoreBoard->setPos(800, 0);
+
+
+    //scene_->addText(turnString);
 }
 
 void Game::BackToMain()
 {
+
     scene_->clear();
     MainMenu();
 }
@@ -69,18 +130,74 @@ void Game::About()
 
 }
 
-//qreal xx = -430;
-//qreal yy = -40;
+QString strify(PlayerTurn n){
+    switch (n){
+    case PlayerTurn::none:
+        return QString("none");
+    case PlayerTurn::one:
+        return QString("one");
+    case PlayerTurn::two:
+        return QString("two");
+    default:
+        return QString("Invalid Enum");
+
+
+    }
+}
+
+void Game::EndTurn()
+{
+    for(auto i: player_one->hand_) scene_->removeItem(i);//remove everything player one
+    for(auto i: player_two->hand_) scene_->removeItem(i);//remove everything player two
+
+    player_one->hand_.clear();
+    player_two->hand_.clear();
+
+    if(turn == PlayerTurn::one){
+       turn = PlayerTurn::two;
+    } else if(turn == PlayerTurn::two){
+       turn = PlayerTurn::one;
+    }
+    displayScoreBoard();
+
+    qDebug()<< strify(turn);
+
+}
+
+qreal yy = 0;
 
 void Game::draw()
 {
-    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
 
-    Card * temp = testDeck->Draw();
+    if(turn == PlayerTurn::one){
+        for(auto i: player_one->hand_) scene_->removeItem(i);//remove everything player one
+        for(auto i: player_two->hand_) scene_->removeItem(i);//remove everything player two
 
-    hand.push_back(temp);
-    //temp->setPos(xx,yy);
-    scene_->addItem(temp);
+        qreal xx = 0;
+        player_one->DrawCard();
+        for(auto i: player_one->hand_){
+            i->setPos(750 + xx,300);
+            scene_->addItem(i);
+            xx += 170;
+        }
+
+
+    } else if (turn == PlayerTurn::two){
+
+        for(auto i: player_one->hand_) scene_->removeItem(i);//remove everything player one
+        for(auto i: player_two->hand_) scene_->removeItem(i);//remove everything player two
+
+        qreal xx = 0;
+        player_two->DrawCard();
+        for(auto i: player_two->hand_){
+            i->setPos(750 + xx,300);
+            scene_->addItem(i);
+            xx += 170;
+        }
+
+
+    }
+
 //    xx += 158;
 
 //    if(xx >= 1350){

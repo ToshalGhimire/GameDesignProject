@@ -5,7 +5,7 @@
 
 #include <QGraphicsPolygonItem>
 
-enum class state {empty,spawn,hero,resource,caltaput,shop};
+enum class state {empty,spawn,hero,resource_one,resource_two,caltaput,shop};
 
 class Tile : public QGraphicsPolygonItem
 {

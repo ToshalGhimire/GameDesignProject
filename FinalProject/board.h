@@ -19,6 +19,9 @@ public:
     QList<Tile *> getBoard();
 
     void MakeBoard(int xPos, int yPos);
+
+    void setSpawnTiles();
+    void ResourceTiles(bool israndom = 0);
 private:
     //QList<Tile *> boardContainer;
     QList<Tile *> boardContainer;

@@ -10,13 +10,15 @@ class Deck
 {
 public:
     Deck();
-    void displayDeck();
 
     void Shuffle();
     Card * Draw();
 
+    QVector<Card*> getDeck(){return deck_;}
+
 private:
     QVector<Card*> deck_;
+    //QVector<Card*> graveyard_;
 };
 
 #endif // DECK_H
