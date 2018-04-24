@@ -11,7 +11,7 @@ Player::Player()
     health_[2] = 10;
     health_[3] = 10;
 
-    gold_ = 0;
+    gold_ = 3;
     heroCount_ = 0;
 }
 

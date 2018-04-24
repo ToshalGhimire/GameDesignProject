@@ -21,7 +21,8 @@ Tile::Tile(QGraphicsItem* parent)
 //    QBrush brush(Qt::lightGray);
 //    brush.setStyle(Qt::SolidPattern);
 
-    setBrush(Qt::lightGray);
+    setPen(QColor(241,237,238, 240));
+    setBrush(QColor(23,21,20,220));
 
 
 
@@ -48,12 +49,12 @@ void Tile::SetColor()
     if(this->TileState_ == state::spawn){
 
 
-        QPen pen(Qt::green);
+        QPen pen(Qt::white);
         pen.setWidth(3);
         setPen(pen);
 
 
-        QBrush brush(Qt::gray);
+        QBrush brush(QColor(15,21,20,220));
         brush.setStyle(Qt::SolidPattern);
 
         setBrush(brush);
@@ -61,19 +62,19 @@ void Tile::SetColor()
         QGraphicsTextItem * SpawnText = new QGraphicsTextItem(this);
         SpawnText->setPlainText(QString("S"));
         QFont titlefont("impact",40);
-        SpawnText->setDefaultTextColor(Qt::darkGray);
+        SpawnText->setDefaultTextColor(QColor(5,200,5,245));
         SpawnText->setFont(titlefont);
         SpawnText->setPos(this->boundingRect().x() + 40, this->boundingRect().y()-10);
 
     }
     if(this->TileState_ == state::resource_one){
 
-        QPen pen(Qt::blue);
-        pen.setWidth(3);
+        QPen pen(QColor(220,50,50,230));
+        pen.setWidth(6);
         setPen(pen);
         this->setZValue(1);
 
-        QBrush brush(Qt::yellow);
+        QBrush brush(QColor(255,223,0, 210));
         brush.setStyle(Qt::SolidPattern);
 
         setBrush(brush);
@@ -81,19 +82,19 @@ void Tile::SetColor()
         QGraphicsTextItem * SpawnText = new QGraphicsTextItem(this);
         SpawnText->setPlainText(QString("+1"));
         QFont titlefont("impact",30);
-        SpawnText->setDefaultTextColor(Qt::darkGray);
+        SpawnText->setDefaultTextColor(QColor(80,80,80,245));
         SpawnText->setFont(titlefont);
         SpawnText->setPos(this->boundingRect().x() + 30, this->boundingRect().y());
     }
     if(this->TileState_ == state::resource_two){
 
 
-        QPen pen(Qt::blue);
-        pen.setWidth(3);
+        QPen pen(QColor(220,50,50,230));
+        pen.setWidth(6);
         setPen(pen);
         this->setZValue(1);
 
-        QBrush brush(Qt::yellow);
+        QBrush brush(QColor(255,215,0, 255));
         brush.setStyle(Qt::SolidPattern);
         this->setZValue(1);
 
@@ -103,7 +104,7 @@ void Tile::SetColor()
         QGraphicsTextItem * SpawnText = new QGraphicsTextItem(this);
         SpawnText->setPlainText(QString("+2"));
         QFont titlefont("impact",30);
-        SpawnText->setDefaultTextColor(Qt::darkGray);
+        SpawnText->setDefaultTextColor(QColor(80,80,80,245));
         SpawnText->setFont(titlefont);
         SpawnText->setPos(this->boundingRect().x() + 30, this->boundingRect().y());
     }
@@ -111,12 +112,12 @@ void Tile::SetColor()
 
 
 
-        QPen pen(Qt::red);
-        pen.setWidth(5);
+        QPen pen(QColor(241,237,238, 240));
+        pen.setWidth(6);
         setPen(pen);
 
 
-        QBrush brush(Qt::lightGray);
+        QBrush brush(QColor(220,50,50,250));
         brush.setStyle(Qt::SolidPattern);
 
         setBrush(brush);
@@ -124,7 +125,7 @@ void Tile::SetColor()
         QGraphicsTextItem * SpawnText = new QGraphicsTextItem(this);
         SpawnText->setPlainText(QString("C"));
         QFont titlefont("impact",35);
-        SpawnText->setDefaultTextColor(Qt::darkGray);
+        SpawnText->setDefaultTextColor(QColor(241,237,238, 240));
         SpawnText->setFont(titlefont);
         SpawnText->setPos(this->boundingRect().x() + 43, this->boundingRect().y()-4);
     }

@@ -53,7 +53,8 @@ private:
     Player * player_two;
     PlayerTurn turn = PlayerTurn::none;
 
-    QGraphicsTextItem * scoreBoard = new QGraphicsTextItem();
+    QGraphicsTextItem * scoreBoard_ = new QGraphicsTextItem();
+    QGraphicsTextItem * goldCount_ = new QGraphicsTextItem();
 
 
 };

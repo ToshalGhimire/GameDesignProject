@@ -22,12 +22,13 @@ Game::Game(QWidget *parent)
 void Game::Start()
 {
     //Music->pause(); MUSIC
-
     scene_->clear();
 
+    //create board
     GameBoard = new Board();
     GameBoard->MakeBoard(30,50);
 
+    //create players
     player_one = new Player();
     player_two = new Player();
 
@@ -58,13 +59,16 @@ void Game::Start()
     connect(drawButton,SIGNAL(clicked()),this,SLOT(draw()));
     scene_->addItem(drawButton);
 
-
+    //add gold icon
     QString filename = ":/card/Coins.png";
     QImage image(filename);
 
     QGraphicsPixmapItem * item = new QGraphicsPixmapItem(QPixmap::fromImage(image));
-    item->setPos(700,620);
+    item->setPos(580,620);
     scene_->addItem(item);
+
+
+
 
 
 }
@@ -74,25 +78,47 @@ void Game::displayScoreBoard(){
     QString p1 = player_one->GetHealthInfo();
     QString p2 = player_two->GetHealthInfo();
 
-    QString turnString;
+
+    QString p1_gold = QString::number(player_one->GetGold());
+    QString p2_gold = QString::number(player_two->GetGold());
+
+    QString goldString,turnString;
+
+
     if(turn == PlayerTurn::one){
         turnString = QString("Player 1 Turn");
+        goldString = p1_gold;
     }else if(turn == PlayerTurn::two){
         turnString = QString("Player 2 Turn");
+        goldString = p2_gold;
+
     }else {
         turnString = QString("No One's Turn");
     }
 
     QString score = QString(p1 + " | " + turnString + " | " + p2);
 
-    scene_->removeItem(scoreBoard);
-    scoreBoard = new QGraphicsTextItem(score);
+    scene_->removeItem(scoreBoard_);
+    scene_->removeItem(goldCount_);
+
+    goldCount_ = new QGraphicsTextItem(goldString);
+    scoreBoard_ = new QGraphicsTextItem(score);
+
     QFont scoreFont("impact",20);
-    scoreBoard->setFont(scoreFont);
-    scene_->addItem(scoreBoard);
+    QFont goldFont("impact",70);
+    scoreBoard_->setFont(scoreFont);
+    goldCount_->setFont(goldFont);
 
-    scoreBoard->setPos(800, 0);
+    goldCount_->setDefaultTextColor(QColor(255,223,0, 245));
 
+    scene_->addItem(goldCount_);
+    scene_->addItem(scoreBoard_);
+
+    scoreBoard_->setPos(800, 0);
+    goldCount_->setPos(720,610);
+
+    player_one->PlusGold(1); //DEBUG
+    player_two->PlusGold(2); //DEBUG
 
     //scene_->addText(turnString);
 }

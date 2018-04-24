@@ -18,8 +18,11 @@ public:
     void shuffle();
 
     QString GetHealthInfo();
-
     QVector<Card*> hand_;
+
+    int GetGold(){return gold_;}
+    void MinusGold(int val){gold_ = gold_- val;}
+    void PlusGold(int val){gold_ = gold_ + val;}
 
 private:
     Deck * deck_;

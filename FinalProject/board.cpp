@@ -40,7 +40,7 @@ void Board::MakeBoard(int xPos, int yPos)
 
 
     setSpawnTiles();//seting Spawn points
-    ResourceTiles();//seting Resource Tiles ResourceTiles(true) = random tiles
+    ResourceTiles();//seting Resource Tiles ResourceTiles(true) = RANDOM tiles
 
     //seting caltapult
     boardContainer[23]->setZValue(1);
