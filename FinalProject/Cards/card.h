@@ -3,8 +3,6 @@
 
 #include<QGraphicsItem>
 #include <string>
-
-
 #include "tile.h"
 
 struct CardData{
@@ -14,12 +12,6 @@ struct CardData{
     int movement;
     int range;
     QString description;
-};
-
-struct CardIcons {
-    QImage coins;
-    QImage movement;
-    QImage power;
 };
 
 class Card : public QGraphicsRectItem
@@ -38,16 +30,23 @@ public:
 
     void SETPOS(qreal x, qreal y);
 
+    CardData get_CardData(){return info;}
+
+    static Card * GetClickedItem(){return clickedCard;}
+    static void clearClickedItem(){clickedCard = NULL;}
+
 private:
     CardData info;
-    CardIcons icon;
-
+    int clickedOrNot = 0;
     qreal xpos,ypos;
 
     bool hasMoved_;
     bool hasAttacked_;
 
+    static Card* clickedCard;
 
+protected:
+    void mousePressEvent(QGraphicsSceneMouseEvent *event);
 };
 
 

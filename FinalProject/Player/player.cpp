@@ -39,10 +39,10 @@ void Player::shuffle()
 QString Player::GetHealthInfo()
 {
 
-    QString healthScore = QString(QString::number(health_[0]) + " - " +
-                                   QString::number(health_[0]) + " - " +
-                                    QString::number(health_[0]) + " - " +
-                                    QString::number(health_[0]) );
+    QString healthScore = QString(QString::number(health_[0]) + "\n" + "\n" +
+                                   QString::number(health_[1]) + "\n" + "\n" +
+                                    QString::number(health_[2]) + "\n" + "\n" +
+                                    QString::number(health_[3]) );
 
     return healthScore;
 }

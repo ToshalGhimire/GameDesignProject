@@ -2,12 +2,12 @@
 #include "board.h"
 #include <ctime>        // std::time
 
-
 extern Game * game;
 
-Board::Board()
+Board& Board::getInstance()
 {
-
+    static Board instance;
+    return instance;
 }
 
 QList<Tile *> Board::getBoard()
@@ -45,9 +45,6 @@ void Board::MakeBoard(int xPos, int yPos)
     //seting caltapult
     boardContainer[23]->setZValue(1);
     boardContainer[23]->setState(state::caltaput);
-
-
-
 }
 
 void Board::setSpawnTiles()
@@ -60,7 +57,6 @@ void Board::setSpawnTiles()
      boardContainer[44]->setState(state::spawn);
      boardContainer[45]->setState(state::spawn);
      boardContainer[46]->setState(state::spawn);
-
 }
 
 void Board::ResourceTiles(bool israndom)
@@ -71,7 +67,6 @@ void Board::ResourceTiles(bool israndom)
         int first = (rand() %2 ) + 11;
         int second = (rand() %2 ) + 14;
         int third = (rand() %2 ) + 17;
-
 
         boardContainer[first]->setState(state::resource_one);
         boardContainer[second]->setState(state::resource_one);
@@ -84,10 +79,8 @@ void Board::ResourceTiles(bool israndom)
 
         boardContainer[21]->setState(state::resource_two);
         boardContainer[25]->setState(state::resource_two);
-
     }
     else{
-
         boardContainer[4]->setState(state::resource_one);
         boardContainer[10]->setState(state::resource_one);
         boardContainer[13]->setState(state::resource_one);
@@ -100,10 +93,7 @@ void Board::ResourceTiles(bool israndom)
 
         boardContainer[20]->setState(state::resource_two);
         boardContainer[26]->setState(state::resource_two);
-
     }
-
-
 }
 
 void Board::makeTileColumn(int x, int y, int row)

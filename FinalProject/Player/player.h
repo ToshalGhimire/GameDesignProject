@@ -19,6 +19,7 @@ public:
 
     QString GetHealthInfo();
     QVector<Card*> hand_;
+    QVector<Tile*> onField_;
 
     int GetGold(){return gold_;}
     void MinusGold(int val){gold_ = gold_- val;}

@@ -32,36 +32,24 @@ Deck::Deck()
         temp.description = line.split(',')[5];
 
         Card * TempCard = new Card(temp);
-
         deck_.push_back(TempCard);
-
-
-
     }
 
     std::random_shuffle(deck_.begin(),deck_.end()); //suffleing deck
-
-
-
-
-
 }
 
 
 void Deck::Shuffle()
 {
     std::random_shuffle(deck_.begin(),deck_.end());
-
 }
 
 Card * Deck::Draw()
 {
-
     if(deck_.size() == 0){
         return NULL;
     }
     Card * out;
     out = deck_.takeFirst();
     return out;
-
 }

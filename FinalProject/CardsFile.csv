@@ -5,15 +5,15 @@ Wyrmling,1,1,3,1,Power Tile: Gain +3 Attack
 Begger,1,1,2,1,"Power Tile: Choose, draw a card OR gain +1 Mana (Single Use)"
 Swordsman,1,2,2,1,No Description
 Seeker,2,2,3,2,Power Tile: Spell cards cost 1 Mana less
-Novice Ranger,2,1,3,2,Power Tile: Gain +1 Range and +1 Attack
+New Ranger,2,1,3,2,Power Tile: Gain +1 Range and +1 Attack
 Captian Frog,2,3,3,1,"this card can jump, meaning it can skip over tiles that filled and movemnt speed(3) starts counting from the next tile"
 Shield Bearer,2,2,2,1,No Description
 Medic,2,2,2,1,Power Tile: Heal a target in a 3 tile radius for 2 health. (Single Use)
 Adolesent Dragon,3,3,3,1,No Description
-Crazed Barbarian,3,3,4,1,No Description
+Crazy Barbarian,3,3,4,1,No Description
 Ranger,3,2,3,2,Power Tile: Gain +1 Range and +2 Attack
 Wizard,3,2,2,2,Power Tile: +1 Spell Power
-Arcane Crazed Sergant,4,3,3,1,Power Tile: Give +2 Attack to all friendly creatures in a 1 tile radius.
+Arcane Sergant,4,3,3,1,Power Tile: Give +2 Attack to all friendly creatures in a 1 tile radius.
 Dragon Knight,4,4,2,1,Cleave (Attacks hit the primary target as well as the tiles to the left and right of the primary)
 Dragon Priest,4,4,2,1,Power Tile: Ressurect a friendly dragon that has died this game. (Single Use)
 Persuader,4,2,2,1,"if this card gets within one unit of a enemy scout, he can convert the scout into an aly (Single Use)"
@@ -22,26 +22,26 @@ Dragon Summoner,5,5,2,2,Power Tile: Can summon one dragon from your hand per tur
 Mind Wyrm,5,3,2,1,Power Tile: Take Control of an enemy creature that is also on a power tile
 Ogre Thug,5,4,2,1,No Description
 Arcane Dragon,5,2,5,1,Power Tile: Gain +5 Attack and +5 Health AND Lose -4 Movement
-Fart.....,5,6,3,1,Can make the enviroment smelly and distracting. while farting nobody can use spell.
+Gas,5,6,3,1,Can make the enviroment smelly and distracting. while farting nobody can use spell.
 Plague Ogre,5,5,1,1,Deals one damage to enemy creatures in a one tile radius at the end of each turn.
-Rush Rocket,5,3,5,1,High movement card 
+Rush Rocket,5,3,5,1,High movement card
 Mana Scout ,5,1,3,1,"this card can only be summoned by sacrificing two scouts, one must be in mana tile, + 5 Mana/Resource per turn"
 Fatsu ,5,4,2,1,Can jump on target. Target can be damaged.
 Holy Priest,5,2,3,1,Heals all friendly targets in a one tile radius at the end of each turn.
 Ogre,6,6,3,1,No Description
 Frost Dragon,6,5,2,2,Freeze (Attacks root the target in place for one turn)
 Laugning ninja,6,6,3,1,Makes target laugh. Can decrease health of target.
-lightning bolt dragon,6,6,3,1,strikes nearby target with lightning bolt
+lightning dragon,6,6,3,1,strikes nearby target with lightning bolt
 Dragon Hunter,6,4,3,3,Gain +5 Attack only when attacking Dragon creatures
 Phoenix,6,3,3,1,If this creature dies on a Power Tile resummon it for no cost next turn.
 Seige Ballista,7,5,1,5,Long Range
 Life Eater,7,4,3,1,"if this card attaks another creature, it gains (attack damage /3 * 1) health"
-Bloodied Bezerker,7,6,2,1,Rage +4 (When this creature is below its maximum health gain a certain amount of attack)
+Blood Bezerker,7,6,2,1,Rage +4 (When this creature is below its maximum health gain a certain amount of attack)
 Adult Dragon,7,6,2,1,Cleave (Attacks hit the primary target as well as the tiles to the left and right of the primary)
 Battle Commander,7,6,3,1,Power Tile: All creatures in a 1 tile radius gain +1 Attack and +1 Health
 Lonely Dragon,8,8,2,1,The next dragon you play costs 2 less Mana
 Dragon Matron,8,6,2,1,Power Tile: After two turns summon the lowest cost dragon from your hand onto the field.
-Bloodlust Dragon,8,3,2,1,can kill if target is injured
+Blood Dragon,8,3,2,1,can kill if target is injured
 Dragon Hoarder,8,6,2,1,"Power Tile: Draw a card, if you have another dragon in your hand draw 2 instead."
 Primitive Drake,9,10,3,1,No Description
 Xoph,9,6,3,1,Power Tile: Your next two spells are free.

@@ -43,6 +43,7 @@ public slots:
     void EndTurn();
     void draw();
     void Test();
+    void Summon();
 
 private:
     QMediaPlayer * Music;
@@ -54,6 +55,8 @@ private:
     PlayerTurn turn = PlayerTurn::none;
 
     QGraphicsTextItem * scoreBoard_ = new QGraphicsTextItem();
+    QGraphicsTextItem * scoreBoard_1 = new QGraphicsTextItem();
+    QGraphicsTextItem * scoreBoard_2 = new QGraphicsTextItem();
     QGraphicsTextItem * goldCount_ = new QGraphicsTextItem();
 
 

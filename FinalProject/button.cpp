@@ -6,7 +6,8 @@
 Button::Button(QString name, QGraphicsItem *parent) : QGraphicsRectItem(parent)
 {
    //making rect and seting color
-   setRect(0,0,200,50);
+//   setRect(0,0,200,50);
+   setRect(0,0,180,50);
 
    QBrush brush;
    brush.setStyle(Qt::SolidPattern);
@@ -18,10 +19,10 @@ Button::Button(QString name, QGraphicsItem *parent) : QGraphicsRectItem(parent)
 
    text = new QGraphicsTextItem(name,this);
 
-   int xpos = rect().width()/2 - text->boundingRect().width();
-   int ypos = rect().height()/2 - text->boundingRect().height();
+   double xpos = rect().width()/2 - (text->boundingRect().width())/1.4;
+   double ypos = rect().height()/2 - (text->boundingRect().height())/1.25;
 
-   QFont font("comic sans",20);
+   QFont font("Avenir",20);
    text->setFont(font);
 
 
