@@ -4,15 +4,14 @@
 
 Game::Game(QWidget *parent)
 {
-    std::srand(unsigned(std::time(0)));
    //set screen
    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-   setFixedSize(768,1000);
+   setFixedSize(850,1000);
 
    //set scene
    scene_ = new QGraphicsScene();
-   scene_->setSceneRect(0,0,768,1000);
+   scene_->setSceneRect(0,0,850,1000);
    setScene(scene_);
    //Music = new QMediaPlayer(); MUSIC
 }
@@ -23,9 +22,9 @@ void Game::Start()
     scene_->clear();
 
     //create board
-    Board& GameBoard = Board::getInstance();
+    //GameBoard = Board::getInstance();
 //    GameBoard->MakeBoard(2,2);
-    GameBoard.MakeBoard(120,130);
+    GameBoard.MakeBoard(100,90);
 
     //create players
     player_one = new Player();
@@ -40,27 +39,27 @@ void Game::Start()
 
     //Quit button
     Button * QuitButton = new Button(QString("Quit"));
-    QuitButton->setPos(20,40);
+    QuitButton->setPos(20,5);
     scene_->addItem(QuitButton);
     connect(QuitButton,SIGNAL(clicked()),this,SLOT(BackToMain()));
 
     //End Turn button
     Button * EndTurnButton = new Button(QString("End Turn"));
 //    EndTurnButton->setPos(1250,700);
-    EndTurnButton->setPos(531,935);
+    EndTurnButton->setPos(541,935);
     scene_->addItem(EndTurnButton);
     connect(EndTurnButton,SIGNAL(clicked()),this,SLOT(EndTurn()));
 
     //Draw Button
     Button * drawButton = new Button(QString("Draw"));
-    drawButton->setPos(294,935);
+    drawButton->setPos(304,935);
 //    drawButton->setPos(1025,700);
     connect(drawButton,SIGNAL(clicked()),this,SLOT(draw()));
     scene_->addItem(drawButton);
 
     //Summon Button
     Button * summonButton = new Button(QString("Summon"));
-    summonButton->setPos(57,935);
+    summonButton->setPos(67,935);
     connect(summonButton,SIGNAL(clicked()),this,SLOT(Summon()));
     scene_->addItem(summonButton);
 
@@ -69,8 +68,8 @@ void Game::Start()
     QImage image(filename);
 
     QGraphicsPixmapItem * item = new QGraphicsPixmapItem(QPixmap::fromImage(image));
-    item->setPos(560,43);
-    item->setScale(.3);
+    item->setPos(720,2);
+    item->setScale(.4);
     scene_->addItem(item);
 }
 
@@ -106,6 +105,9 @@ void Game::displayScoreBoard(){
     QString score_health1 = QString(p1);
     QString score_health2 = QString(p2);
 
+    scene_->removeItem(scoreBoard_1);
+    scene_->removeItem(scoreBoard_2);
+
     scene_->removeItem(scoreBoard_);
     scene_->removeItem(goldCount_);
 
@@ -136,10 +138,10 @@ void Game::displayScoreBoard(){
     scene_->addItem(scoreBoard_1);
     scene_->addItem(scoreBoard_2);
 
-    scoreBoard_->setPos(325, 40);
-    scoreBoard_1->setPos(50, 255);
-    scoreBoard_2->setPos(670, 255);
-    goldCount_->setPos(610, 40);
+    scoreBoard_->setPos(365, -11);
+    scoreBoard_1->setPos(4, 230);
+    scoreBoard_2->setPos(800, 230);
+    goldCount_->setPos(780, -8);
 //    scoreBoard_->setPos(325, -50);
 //    goldCount_->setPos(610,-50);
 
@@ -195,6 +197,7 @@ QString strify(PlayerTurn n){
 
 void Game::EndTurn()
 {
+    qDebug() << "\nTurn Has Ended!\n==================";
     for(auto i: player_one->hand_) scene_->removeItem(i);//remove everything player one
     for(auto i: player_two->hand_) scene_->removeItem(i);//remove everything player two
 
@@ -205,10 +208,37 @@ void Game::EndTurn()
        turn = PlayerTurn::one;
        player_one->PlusGold(1);
     }
+
+    scene_->removeItem(scoreBoard_1);
+    scene_->removeItem(scoreBoard_2);
+
     displayScoreBoard();
 
-    qDebug()<< strify(turn);
+    Board& tempBoard = Board::getInstance();
 
+    for(int i = 0; i < tempBoard.P1_heros.size(); i++){
+        if(tempBoard.P1_heros[i] != NULL){
+            tempBoard.P1_heros[i]->setMovedFalse();
+        }
+
+        if(tempBoard.P2_heros[i] != NULL){
+            tempBoard.P2_heros[i]->setMovedFalse();
+        }
+
+    }
+
+    if(turn == PlayerTurn::one){
+        player_one->PlusGold(tempBoard.getResourceCount(turn));
+    }else if(turn == PlayerTurn::two){
+        player_two->PlusGold(tempBoard.getResourceCount(turn));
+    }
+
+
+    if(tempBoard.CapturedCaltapult() == PlayerTurn::one){
+        player_two->CatapultHit();
+    }else if(tempBoard.CapturedCaltapult() == PlayerTurn::two) {
+        player_one->CatapultHit();
+    }
     Card::clearClickedItem();
 
 }
@@ -220,22 +250,40 @@ void Game::Summon(){
         }
 
         if(turn == PlayerTurn::one){
-            //player ones summon
+            // player ones summon
             Tile * HeroTile = new Tile();
             Card * carditem = Card::GetClickedItem();
-            //checks if players can afford that item or not
+
+            // checks if players can afford that item or not
             if(player_one->GetGold() < carditem->get_CardData().manaCost){
                 qDebug() << "Cant Afford this item!";
                 return;
             } else{
-                //if player can afford it then
+                // Affordable Card
+
+                // first checking if board has space
+                bool hasSpace = false;
+                for(auto i: GameBoard.getBoard()){
+                    if(i->getState() == state::spawn_p1){
+                        hasSpace = true;
+                        break;
+                    }
+                }
+                if(!hasSpace){
+                    qDebug() << "NO SPAWN SPOT LEFT!";
+                    return;
+                }
+
+                // if code reaches here, board has space
                 player_one->MinusGold(carditem->get_CardData().manaCost);
                 displayScoreBoard();
 
+                // making new tile card
                 CardData temp = carditem->get_CardData();
                 HeroTile->MakeHero(&temp,tileOwner::one);
                 HeroTile->setFlag(QGraphicsItem::ItemIsMovable);
 
+                // updating hand
                 for(auto i : player_one->hand_){
                     if (i == carditem){
                         player_one->hand_.removeOne(carditem);
@@ -245,8 +293,10 @@ void Game::Summon(){
                 scene_->addItem(HeroTile);
                 scene_->removeItem(carditem);
 
-                HeroTile->setPos(0,0);
+                // placing in right spawn tile
+                GameBoard.SpawnCard(HeroTile,turn);
             }
+
 
         } else if (turn == PlayerTurn::two){
             Tile * HeroTile = new Tile();
@@ -257,25 +307,42 @@ void Game::Summon(){
                 qDebug() << "Cant Afford this item!";
                 return;
             }else{
-                //if player can afford it then
+                // Affordable Card
+
+                // first checking if board has space
+                bool hasSpace = false;
+                for(auto i: GameBoard.getBoard()){
+                    if(i->getState() == state::spawn_p2){
+                        hasSpace = true;
+                        break;
+                    }
+                }
+                if(!hasSpace){
+                    qDebug() << "NO SPAWN SPOT LEFT!";
+                    return;
+                }
+
+                // if code reaches here, board has space
                 player_two->MinusGold(carditem->get_CardData().manaCost);
                 displayScoreBoard();
 
-                for(auto i : player_two->hand_){
-                    if (i == carditem){
-                        player_two->hand_.removeOne(carditem);
-                    }
-                }
-
+                // making new tile card
                 CardData temp = carditem->get_CardData();
                 HeroTile->MakeHero(&temp,tileOwner::two);
                 HeroTile->setFlag(QGraphicsItem::ItemIsMovable);
 
+                // updating hand
+                for(auto i : player_two->hand_){
+                    if (i == carditem){
+                        player_two->hand_.removeOne(carditem);
+                    }
+                }   
                 player_two->onField_.push_back(HeroTile);
                 scene_->addItem(HeroTile);
                 scene_->removeItem(carditem);
 
-                HeroTile->setPos(0,0);
+                // placing in right spawn tile
+                GameBoard.SpawnCard(HeroTile,turn);
             }
         }
 
@@ -293,7 +360,7 @@ void Game::draw()
         qreal xx = 0;
         player_one->DrawCard();
         for(auto i: player_one->hand_){
-            i->setPos(55 + xx,700);
+            i->setPos(55 + xx,720);
             scene_->addItem(i);
             xx += 170;
         }
@@ -305,7 +372,7 @@ void Game::draw()
         qreal xx = 0;
         player_two->DrawCard();
         for(auto i: player_two->hand_){
-            i->setPos(55 + xx,700);
+            i->setPos(55 + xx,720);
             scene_->addItem(i);
             xx += 170;
         }

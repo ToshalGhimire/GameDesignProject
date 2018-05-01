@@ -1,5 +1,7 @@
 #include "tile.h"
 
+Tile* Tile::ShiftClickedPos_;
+
 Tile::Tile(QGraphicsItem* parent)
 {
     //drawing polygon
@@ -40,7 +42,7 @@ void Tile::setState(state s)
 void Tile::SetColor()
 {
 
-    if(this->TileState_ == state::spawn){
+    if(this->TileState_ == state::spawn_p1 || this->TileState_ == state::spawn_p2 ){
 
         QPen pen(Qt::white);
         pen.setWidth(3);
@@ -124,12 +126,12 @@ void Tile::SetColor()
             this->setZValue(2);
 
             if(owner_ == tileOwner::one){
-                QPen pen(Qt::blue);
+                QPen pen(Qt::red);
                 pen.setWidth(6);
                 setPen(pen);
 
               }else if(owner_ == tileOwner::two){
-                 QPen pen(Qt::red);
+                 QPen pen(Qt::blue);
                  pen.setWidth(6);
                  setPen(pen);
                }else{
@@ -139,9 +141,6 @@ void Tile::SetColor()
              }
 
             QBrush brush(Qt::gray);
-
-
-            qDebug() << "Tiles position: " << this->pos();
 
             brush.setStyle(Qt::SolidPattern);
             setBrush(brush);
@@ -154,31 +153,35 @@ void Tile::SetColor()
             // Attack text
             QGraphicsTextItem * AttackText = new QGraphicsTextItem(this);
             AttackText->setPlainText(QString("⚔") + QString::number(data_->power));
-            QFont titlefont("Avenir",15);
+            this->cardPower_ = data_->power;
+            QFont titlefont("Avenir",10);
             AttackText->setDefaultTextColor(Qt::black);
             AttackText->setFont(titlefont);
-            AttackText->setPos(this->boundingRect().x() + 35, this->boundingRect().y());
+            AttackText->setPos(this->boundingRect().x() + 40, this->boundingRect().y());
 
             // Movement text
             QGraphicsTextItem * MovementText = new QGraphicsTextItem(this);
             MovementText->setPlainText(QString("☈") + QString::number(data_->movement));
+            this->cardMovement_ = data_->movement;
             MovementText->setDefaultTextColor(Qt::black);
             MovementText->setFont(titlefont);
-            MovementText->setPos(this->boundingRect().x() + 42, this->boundingRect().y()+33);
+            MovementText->setPos(this->boundingRect().x() + 42, this->boundingRect().y()+45);
 
             // Name text
             QGraphicsTextItem * NameText = new QGraphicsTextItem(this);
             NameText->setPlainText(QString(data_->name));
+            this->cardName_ = data_->name;
             QFont namefont("times new roman",10);
             NameText->setDefaultTextColor(Qt::black);
             NameText->setFont(namefont);
-            NameText->setPos(this->boundingRect().x() + 15, this->boundingRect().y() + 24);
+            NameText->setPos(this->boundingRect().x() + 10, this->boundingRect().y() + 24);
 
             if(data_->range != 1){
                 // Adding range text (if range is more then one)
                 MovementText->setPos(this->boundingRect().x() + 31, this->boundingRect().y()+45);
                 QGraphicsTextItem * RangeText = new QGraphicsTextItem(this);
                 RangeText->setPlainText(QString("R:") + QString::number(data_->range));
+                this->cardRange_ = data_->range;
                 RangeText->setDefaultTextColor(Qt::black);
                 RangeText->setFont(titlefont);
                 RangeText->setPos(this->boundingRect().x() + 65, this->boundingRect().y() + 45);
@@ -192,4 +195,66 @@ void Tile::MakeHero(CardData * data, tileOwner who){
     owner_ = who;
     TileState_ = state::hero;
     this->SetColor();
+}
+
+void Tile::mousePressEvent(QGraphicsSceneMouseEvent *event)
+{
+
+    if(this->TileState_ == state::hero){
+        Button * moveButton = new Button(QString("Move"));
+        moveButton->setPos(0,600);
+        connect(moveButton,SIGNAL(clicked()),this,SLOT(test()));
+        scene()->addItem(moveButton);
+    }
+
+    if(event->button() == Qt::RightButton){
+        if(this->getState() == state::hero){
+            qDebug() << "cannot move there!";
+        }else{
+            ShiftClickedPos_ = this;
+        }
+
+    }
+
+}
+
+int xOffset = 70;
+int yOffset = 35;
+
+bool Tile::distanceCalcuate(Tile * current,Tile * dest){
+
+    if(dest == NULL){
+        qDebug() << "Please Shift Click a point!";
+        return 0;
+    }
+    int x1 = current->x() + xOffset;
+    int y1 = current->y() + yOffset;
+
+    int x2 = dest->x() + xOffset;
+    int y2 = dest->y() + yOffset;
+
+    int inside = pow((x1-x2),2) + pow((y1-y2),2);
+
+    int result = pow(inside,.5);
+
+
+    if(result < cardMovement_*96){
+        qDebug() << "That Movement is Allowed";
+        return true;
+    }else{
+        qDebug() << "That Movement is NOT Allowed";
+        return false;
+    }
+}
+
+void Tile::test()
+{
+
+    if(distanceCalcuate(this,ShiftClickedPos_)){
+        Board& tempBoard = Board::getInstance();
+        tempBoard.MoveTile(this,ShiftClickedPos_);
+
+    };
+
+
 }

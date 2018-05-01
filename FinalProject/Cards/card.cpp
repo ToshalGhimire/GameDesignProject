@@ -56,15 +56,15 @@ void Card::CardStats()
 
     QGraphicsTextItem * Power = new QGraphicsTextItem(this);
     Power->setPlainText(QString("⚔ - POWER: ") +  QString::number(info.power));
-    Power->setPos( this->boundingRect().x(), this->boundingRect().y() + 170);
+    Power->setPos( this->boundingRect().x(), this->boundingRect().y() + 130);
 
     QGraphicsTextItem * Movement = new QGraphicsTextItem(this);
     Movement->setPlainText(QString("☈ - MOVEMENT: ") +  QString::number(info.movement));
-    Movement->setPos( this->boundingRect().x(), this->boundingRect().y() + 185);
+    Movement->setPos( this->boundingRect().x(), this->boundingRect().y() + 150);
 
     QGraphicsTextItem * Range = new QGraphicsTextItem(this);
     Range->setPlainText(QString("Range: ") +  QString::number(info.range));
-    Range->setPos( this->boundingRect().x(), this->boundingRect().y() + 155);
+    Range->setPos( this->boundingRect().x(), this->boundingRect().y() + 110);
 }
 
 void Card::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -85,13 +85,13 @@ void Card::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
 }
 
 QRectF Card::boundingRect() const {
-    return QRectF(0,0,150,210);
+    return QRectF(0,0,150,180);
 }
 
 QPainterPath Card::shape() const
 {
     QPainterPath path;
-    path.addRect(QRectF(0,0,150,210));
+    path.addRect(QRectF(0,0,150,180));
     return path;
 }
 

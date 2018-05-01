@@ -46,4 +46,4 @@ Dragon Hoarder,8,6,2,1,"Power Tile: Draw a card, if you have another dragon in y
 Primitive Drake,9,10,3,1,No Description
 Xoph,9,6,3,1,Power Tile: Your next two spells are free.
 Tul,10,9,2,1,Cleave AND Knockback
-Light Cheetah,10,4,0,1,"costs 3 mana to move this creature, can move anywhere on the map but the enemy base"
+Light Cheetah,10,4,4,1,"costs 3 mana to move this creature, can move anywhere on the map but the enemy base"

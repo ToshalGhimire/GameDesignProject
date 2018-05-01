@@ -11,7 +11,7 @@ Player::Player()
     health_[2] = 10;
     health_[3] = 10;
 
-    gold_ = 3;
+    gold_ = 20;//DEBUG, set to 3 once done
     heroCount_ = 0;
 }
 
@@ -45,4 +45,12 @@ QString Player::GetHealthInfo()
                                     QString::number(health_[3]) );
 
     return healthScore;
+}
+
+void Player::CatapultHit()
+{
+    this->health_[0]--;
+    this->health_[1]--;
+    this->health_[2]--;
+    this->health_[3]--;
 }

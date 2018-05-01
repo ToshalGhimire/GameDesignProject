@@ -30,7 +30,9 @@ public:
 
     //public fields (since global class)
     QGraphicsScene * scene_;
-    Board * GameBoard;
+    PlayerTurn getTurn(){return turn;}
+
+    Board& GameBoard = Board::getInstance();
 
     //Player player;
 

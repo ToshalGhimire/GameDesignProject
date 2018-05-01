@@ -24,6 +24,7 @@ public:
     int GetGold(){return gold_;}
     void MinusGold(int val){gold_ = gold_- val;}
     void PlusGold(int val){gold_ = gold_ + val;}
+    void CatapultHit();
 
 private:
     Deck * deck_;
