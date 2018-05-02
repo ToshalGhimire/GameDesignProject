@@ -6,6 +6,9 @@
 #include <ctime>        // std::time
 
 
+/**
+ * @brief Deck::Deck gets data from CSV file then Stores it in a Container, is a Factory for Card
+ */
 Deck::Deck()
 {
     std::srand(unsigned(std::time(0)));
@@ -38,12 +41,18 @@ Deck::Deck()
     std::random_shuffle(deck_.begin(),deck_.end()); //suffleing deck
 }
 
-
+/**
+ * @brief Deck::Shuffles the deck using std::random_shuffle
+ */
 void Deck::Shuffle()
 {
     std::random_shuffle(deck_.begin(),deck_.end());
 }
 
+/**
+ * @brief takes the first card out from the deck and returns it
+ * @return
+ */
 Card * Deck::Draw()
 {
     if(deck_.size() == 0){

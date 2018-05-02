@@ -1,7 +1,19 @@
 #include "tile.h"
 
-Tile* Tile::ShiftClickedPos_;
+Tile* Tile::rightClickedTile_ = NULL;
+Tile* Tile::leftClickedHeroTile_ = NULL;
+Button * Tile::prevMoveButton_;
+Button * Tile::prevAttackButton_;
 
+
+
+
+extern Game * game;
+
+/**
+ * @brief Tile::Tile creates the hexgon QGraphicsItem
+ * @param parent
+ */
 Tile::Tile(QGraphicsItem* parent)
 {
     //drawing polygon
@@ -25,6 +37,10 @@ Tile::Tile(QGraphicsItem* parent)
     setBrush(QColor(23,21,20,220));
 }
 
+/**
+ * @brief Tile::SwapStates swap states with another tile
+ * @param t tile state
+ */
 void Tile::SwapStates(Tile &t)
 {
     state temp = this->getState();
@@ -32,6 +48,10 @@ void Tile::SwapStates(Tile &t)
     t.setState(temp);
 }
 
+/**
+ * @brief Tile::setState setter for the tilestate
+ * @param s
+ */
 void Tile::setState(state s)
 {
     this->TileState_ = s;
@@ -39,6 +59,9 @@ void Tile::setState(state s)
     SetColor();
 }
 
+/**
+ * @brief Tile::SetColor my custom altrnative to the Paint Function, handles coloring for each of the diffrent tile state
+ */
 void Tile::SetColor()
 {
 
@@ -176,12 +199,12 @@ void Tile::SetColor()
             NameText->setFont(namefont);
             NameText->setPos(this->boundingRect().x() + 10, this->boundingRect().y() + 24);
 
+            this->cardRange_ = this->data_->range; // saving for hero combat
             if(data_->range != 1){
                 // Adding range text (if range is more then one)
                 MovementText->setPos(this->boundingRect().x() + 31, this->boundingRect().y()+45);
                 QGraphicsTextItem * RangeText = new QGraphicsTextItem(this);
                 RangeText->setPlainText(QString("R:") + QString::number(data_->range));
-                this->cardRange_ = data_->range;
                 RangeText->setDefaultTextColor(Qt::black);
                 RangeText->setFont(titlefont);
                 RangeText->setPos(this->boundingRect().x() + 65, this->boundingRect().y() + 45);
@@ -190,6 +213,11 @@ void Tile::SetColor()
         }
 }
 
+/**
+ * @brief Tile::MakeHero turns a tile into a hero tile, by taking a CardData Struct and owner
+ * @param data Card Data
+ * @param who Owner of card
+ */
 void Tile::MakeHero(CardData * data, tileOwner who){
     data_ = data;
     owner_ = who;
@@ -197,36 +225,102 @@ void Tile::MakeHero(CardData * data, tileOwner who){
     this->SetColor();
 }
 
+/**
+ * @brief Tile::mousePressEvent saves left clicked and right clicked tiles into a static member variable
+ * @param event
+ */
 void Tile::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
 
-    if(this->TileState_ == state::hero){
-        Button * moveButton = new Button(QString("Move"));
-        moveButton->setPos(0,600);
-        connect(moveButton,SIGNAL(clicked()),this,SLOT(test()));
-        scene()->addItem(moveButton);
-    }
 
     if(event->button() == Qt::RightButton){
+
         if(this->getState() == state::hero){
-            qDebug() << "cannot move there!";
+            qDebug() << "\Tile with Existing Hero cannot moved on to!";
         }else{
-            ShiftClickedPos_ = this;
+            rightClickedTile_ = this;
         }
 
     }
+
+    if(event->button() == Qt::LeftButton){
+           if(this->TileState_ == state::hero){
+                leftClickedHeroTile_ = this;
+
+            }
+
+            if(game->getTurn() == PlayerTurn::one ){
+                if(this->TileState_ == state::spawn_p2){
+                    leftClickedHeroTile_ = this;
+                }
+            }else if(game->getTurn() == PlayerTurn::two){
+                if(this->TileState_ == state::spawn_p1){
+                    leftClickedHeroTile_ = this;
+                }
+            }else{
+                RemoveButtons();
+            }
+
+    }
+
+}
+
+/**
+ * @brief Tile::mouseDoubleClickEvent if hero card, brings up two buttons, an attack and a move button
+ * @param event
+ */
+void Tile::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
+{
+
+    RemoveButtons();
+    prevAttackButton_ = NULL;
+    prevMoveButton_ = NULL;
+
+    if(this->getState() == state::hero){
+        Button * moveButton = new Button(QString("Move"));
+        moveButton->setPos(0,620);
+        connect(moveButton,SIGNAL(clicked()),this,SLOT(Move()));
+        scene()->addItem(moveButton);
+
+        Button * attackButton = new Button(QString("Attack"));
+        attackButton->setPos(670,620);
+        connect(attackButton,SIGNAL(clicked()),this,SLOT(Attack()));
+        scene()->addItem(attackButton);
+
+        prevAttackButton_ = attackButton;
+        prevMoveButton_ = moveButton;
+
+       }
+
+
+}
+
+/**
+ * @brief Tile::RemoveButtons removes the two attack and move buttons from scene
+ */
+void Tile::RemoveButtons(){
+    game->scene_->removeItem(prevMoveButton_);
+    game->scene_->removeItem(prevAttackButton_);
 
 }
 
 int xOffset = 70;
 int yOffset = 35;
 
-bool Tile::distanceCalcuate(Tile * current,Tile * dest){
+/**
+ * @brief Tile::distanceCalcuate calcuates the distance between two tiles and returns boolean based on if trying to move or attack
+ * @param current current tile
+ * @param dest tile to move to
+ * @param attack True if attacking another tile
+ * @return Bool
+ */
+bool Tile::distanceCalcuate(Tile * current,Tile * dest, bool attack){
 
     if(dest == NULL){
-        qDebug() << "Please Shift Click a point!";
+        qDebug() << "\nPlease click a point First!";
         return 0;
     }
+
     int x1 = current->x() + xOffset;
     int y1 = current->y() + yOffset;
 
@@ -237,24 +331,74 @@ bool Tile::distanceCalcuate(Tile * current,Tile * dest){
 
     int result = pow(inside,.5);
 
+    if(attack){
 
-    if(result < cardMovement_*96){
-        qDebug() << "That Movement is Allowed";
-        return true;
+        if(Tile::GetLeftClickedItem() == NULL){
+            qDebug() << "\nPlease select a target first!";
+            return 0;
+        }
+
+        if(result < current->cardRange_ * 95){
+            //qDebug() << "\nYour hero is close enough to attack that hero!";
+            return true;
+        }else{
+            qDebug() << "\nYour hero needs to move closer to attack that hero!";
+           return false;
+        }
+
     }else{
-        qDebug() << "That Movement is NOT Allowed";
-        return false;
+
+        if(result < cardMovement_*96){
+            qDebug() << "\nThat Movement is Allowed";
+            return true;
+        }else{
+            qDebug() << "\nThat Movement is NOT Allowed";
+            return false;
+        }
+
     }
+
 }
 
-void Tile::test()
+/**
+ * @brief Tile::clearClickedItems rests right and left clicked tiles to NULL
+ */
+void Tile::clearClickedItems()
+{
+    rightClickedTile_ = NULL;
+    leftClickedHeroTile_ = NULL;
+
+}
+
+/**
+ * @brief Tile::Move once move button is clicked, it calls movetile function if movement is allowed
+ */
+void Tile::Move()
 {
 
-    if(distanceCalcuate(this,ShiftClickedPos_)){
+    if(distanceCalcuate(this,rightClickedTile_)){
         Board& tempBoard = Board::getInstance();
-        tempBoard.MoveTile(this,ShiftClickedPos_);
+        tempBoard.MoveTile(this,rightClickedTile_);
 
     };
 
 
+}
+
+/**
+ * @brief Tile::Attack once attack button is clicked, it calls attacktile function if attack range is allowed
+ */
+void Tile::Attack()
+{
+
+    if(leftClickedHeroTile_ == NULL){
+        qDebug() << "\nPlease Left Click target first!";
+        return;
+    }
+
+    if(distanceCalcuate(this,leftClickedHeroTile_,true)){
+        Board& tempBoard = Board::getInstance();
+        tempBoard.AttackTile(this,leftClickedHeroTile_);
+
+    };
 }

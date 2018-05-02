@@ -12,37 +12,33 @@ class Board
 
 public:
     static Board& getInstance();
-//    Board();
+
+    // Getters/Setters
     QList<Tile *> getBoard(){return boardContainer;}
-
-    void MakeBoard(int xPos, int yPos);
     void setSpawnTiles();
+    int getResourceCount(PlayerTurn whos);
+
+    //Board Construction
+    void MakeBoard(int xPos, int yPos);
     void ResourceTiles(bool israndom = 0);
+    void SpawnReset();
 
+    //Card Movement/Attack/Spawn functions
     void SpawnCard(Tile * card,PlayerTurn t);
-
     void MoveTile(Tile * herotile, Tile* PosToPlace);
+    void AttackTile(Tile * attacker, Tile * Target);
 
-    int Return5(){return 5;} //test DEBUG
-    //QList<Tile *> boardContainer; DEBUG
+    PlayerTurn CapturedCaltapult();
 
     QList<Tile*> P1_heros;
     QList<Tile*> P2_heros;
-
-    void SpwanReset();
-    int getResourceCount(PlayerTurn whos);
-    PlayerTurn CapturedCaltapult();
-
+    QList<Tile *> boardContainer;
 private:
     Board() {}
     Board(Board const&) = delete;
     void operator=(Board const&)  = delete;
-
-    QList<Tile *> boardContainer;
     void makeTileColumn(int x,int y,int row);
 
-//    QList<Tile*> P1_heros;
-//    QList<Tile*> P2_heros;
 };
 
 #endif // BOARD_H

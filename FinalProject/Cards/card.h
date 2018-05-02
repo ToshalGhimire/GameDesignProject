@@ -18,18 +18,13 @@ class Card : public QGraphicsRectItem
 {
 public:
     Card(CardData Card);
-
     void CardStats();
-
     void paint(QPainter *painter,
                const QStyleOptionGraphicsItem *option,
                QWidget *widget);
     QRectF boundingRect() const;
-
     QPainterPath shape() const;
-
     void SETPOS(qreal x, qreal y);
-
     CardData get_CardData(){return info;}
 
     static Card * GetClickedItem(){return clickedCard;}
@@ -44,7 +39,6 @@ private:
     bool hasAttacked_;
 
     static Card* clickedCard;
-
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
 };

@@ -34,9 +34,9 @@ public:
 
     Board& GameBoard = Board::getInstance();
 
-    //Player player;
-
     void displayScoreBoard();
+    void MinusPlayerHealth(int who, int index, int amount);
+    void updateSpawnHealth();
 
 public slots:
     void Start();

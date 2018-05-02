@@ -12,12 +12,10 @@ class Button : public QObject,public QGraphicsRectItem
     Q_OBJECT
 public:
     Button(QString name, QGraphicsItem * parent = NULL);
-
     void mousePressEvent(QGraphicsSceneMouseEvent * event);
-
     void hoverEnterEvent(QGraphicsSceneHoverEvent * event);
     void hoverLeaveEvent(QGraphicsSceneHoverEvent * event);
-
+    void setTextPos(qreal x, qreal y){ text->setPos(x,y);}
 signals:
     void clicked();
 

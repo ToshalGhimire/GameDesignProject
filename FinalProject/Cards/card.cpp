@@ -10,19 +10,13 @@ Card::Card(CardData card)
     info = card;
 
     this->setPen(QPen(Qt::black));
-
-    //scene()->addItem(this);
-
     this->setToolTip(info.description);
     this->toolTip();
-
 
     xpos = 100;
     ypos = 100;
 
     this->CardStats();
-
-//    setFlag(QGraphicsItem::ItemIsMovable);
 
     hasMoved_ = false;
     hasAttacked_ = false;
@@ -67,6 +61,9 @@ void Card::CardStats()
     Range->setPos( this->boundingRect().x(), this->boundingRect().y() + 110);
 }
 
+/**
+ * @brief Painter function used to set color of clicked card
+ */
 void Card::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
 //    painter->setPen(Qt::darkBlue);
@@ -84,10 +81,18 @@ void Card::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
     painter->drawRect(rec);
 }
 
+/**
+ * @brief Card::boundingRect rect of card
+ * @return
+ */
 QRectF Card::boundingRect() const {
     return QRectF(0,0,150,180);
 }
 
+/**
+ * @brief Card::shape shape of card
+ * @return
+ */
 QPainterPath Card::shape() const
 {
     QPainterPath path;
@@ -95,6 +100,11 @@ QPainterPath Card::shape() const
     return path;
 }
 
+/**
+ * @brief Card::SETPOS set the position of the card to x values
+ * @param x
+ * @param y
+ */
 void Card::SETPOS(qreal x, qreal y){
     this->xpos = this->x()+110;
     this->ypos = y;

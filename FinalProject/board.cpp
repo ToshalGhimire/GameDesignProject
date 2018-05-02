@@ -11,7 +11,11 @@ Board& Board::getInstance()
     return instance;
 }
 
-
+/**
+ * @brief Board::MakeBoard makes the game board using MakeTileColumn helper function
+ * @param xPos location of board in scene
+ * @param yPos location of board in scene
+ */
 void Board::MakeBoard(int xPos, int yPos)
 {
 
@@ -49,6 +53,10 @@ void Board::MakeBoard(int xPos, int yPos)
     boardContainer[23]->setState(state::caltaput);
 }
 
+
+/**
+ * @brief Board::setSpawnTiles hard codes the spawn tiles for both players in Tile container
+ */
 void Board::setSpawnTiles()
 {
      boardContainer[0]->setState(state::spawn_p1);
@@ -61,6 +69,10 @@ void Board::setSpawnTiles()
      boardContainer[46]->setState(state::spawn_p2);
 }
 
+/**
+ * @brief Board::ResourceTiles hard codes the Rescource tiles for the board
+ * @param israndom if israncom is true, board randomly sets the values of resource one and two
+ */
 void Board::ResourceTiles(bool israndom)
 {
     std::srand(unsigned(std::time(0)));
@@ -99,7 +111,11 @@ void Board::ResourceTiles(bool israndom)
 }
 
 
-
+/**
+ * @brief Board::SpawnCard takes the card given and turns it into a tile and places it in right spot based on player, and card
+ * @param card card object to summon
+ * @param T whos turn
+ */
 void Board::SpawnCard(Tile *card, PlayerTurn t)
 {
 
@@ -129,6 +145,11 @@ void Board::SpawnCard(Tile *card, PlayerTurn t)
     }
 }
 
+/**
+ * @brief Board::MoveTile handles the logics of moving hero tiles, takes current tile and destination tile
+ * @param herotile the tile that needs to move
+ * @param PosToPlace the tile location to be placed
+ */
 void Board::MoveTile(Tile *herotile, Tile *PosToPlace)
 {
     if(herotile->getOwner() == tileOwner::one){
@@ -140,25 +161,26 @@ void Board::MoveTile(Tile *herotile, Tile *PosToPlace)
                 qDebug() << "\nYou have already moved this hero!";
                 return;
             }
+
+
             if(index_place == 43 || index_place == 44 || index_place == 45 || index_place == 46){
                 qDebug() << "\nYou cannot moved to Opponent's Spawn!";
                 return;
             }
-
 
             if(P1_heros[index_place] == NULL){
                 P1_heros[index_current] = NULL;
                 P1_heros[index_place] = herotile;
                 P1_heros[index_place]->setMovedTrue();
             }else{
-                qDebug() << "Tile is Occupied by hero!";
+                qDebug() << "\nTile is Occupied by hero!";
                 return;
             }
-            SpwanReset();
+            SpawnReset();
             herotile->setPos(boardContainer[index_place]->pos());
 
         }else{
-            qDebug() << "You Cannot Move Opponents heroes!";
+            qDebug() << "\nYou Cannot Move Opponents heroes!";
         }
 
 
@@ -171,6 +193,8 @@ void Board::MoveTile(Tile *herotile, Tile *PosToPlace)
                 qDebug() << "\nYou have already moved this hero!";
                 return;
             }
+
+
             if(index_place == 0 || index_place == 1 || index_place == 2 || index_place == 3){
                 qDebug() << "\nYou cannot moved to Opponent's Spawn!";
                 return;
@@ -181,23 +205,146 @@ void Board::MoveTile(Tile *herotile, Tile *PosToPlace)
                 P2_heros[index_place] = herotile;
                 P2_heros[index_place]->setMovedTrue();
             }else{
-                qDebug() << "Tile is Occupied by hero!";
+                qDebug() << "\nTile is Occupied by hero!";
                 return;
 
             }
-            SpwanReset();
+            SpawnReset();
             herotile->setPos(boardContainer[index_place]->pos());
 
         }else{
-            qDebug() << "You Cannot Move Opponents heroes!";
+            qDebug() << "\nYou Cannot Move Opponents heroes!";
         }
     }
 
 }
 
+/**
+ * @brief Board::AttackTile Handles the attack logic for cards given the attacker and their targer
+ * @param attacker hero tile that is attacking
+ * @param Target target tile that is being attacked, can be hero or spawn
+ */
+void Board::AttackTile(Tile *attacker, Tile *Target)
+{
+    if(Target == attacker) return;
 
 
-void Board::SpwanReset(){
+    if(attacker->getHasAttacked() == true){
+        qDebug() << "\nHero has already attacked!";
+        return;
+    }
+
+
+    if(Target->getState() == state::spawn_p1){
+        // Attacking player One
+        int index = game->GameBoard.boardContainer.indexOf(Target);
+        game->MinusPlayerHealth(1,index,attacker->getAttackPower());
+        attacker->setAttackedTrue();
+        qDebug() << "\nYou attacked Player one!";
+        return;
+    }
+
+    if(Target->getState() == state::spawn_p2){
+        // Attacking player two
+        int index = game->GameBoard.boardContainer.indexOf(Target) - 43;
+        game->MinusPlayerHealth(2,index,attacker->getAttackPower());
+        attacker->setAttackedTrue();
+        qDebug() << "\nYou attacked Player two!";
+        return;
+    }
+
+
+    if(attacker->getOwner() == tileOwner::one && attacker != NULL){
+        if(game->getTurn() == PlayerTurn::one){
+           int targetIndex = P2_heros.indexOf(Target);
+           int attackerIndex = P1_heros.indexOf(attacker);
+
+
+           if(attacker->getAttackPower() > Target->getAttackPower()){
+               //attacker has More Power
+
+               attacker->setPos(Target->pos());
+               P1_heros[targetIndex] = attacker;
+               P1_heros[attackerIndex] = NULL;
+
+               game->scene_->removeItem(P2_heros[targetIndex]);
+               delete Target;
+               P2_heros[targetIndex] = NULL;
+
+               attacker->setAttackedTrue();
+
+
+
+           }else if(attacker->getAttackPower() < Target->getAttackPower()){
+               // Target has more Power
+               game->scene_->removeItem(P1_heros[attackerIndex]);
+               P1_heros[attackerIndex] = NULL;
+
+           }else{
+               // Equal Power
+               game->scene_->removeItem(P1_heros[attackerIndex]);
+               game->scene_->removeItem(P2_heros[targetIndex]);
+
+               P1_heros[attackerIndex] = NULL;
+               P2_heros[targetIndex] = NULL;
+
+           }
+
+
+        }else{
+            qDebug() << "\nYou Cannot Attack with your Opponents heroes!";
+
+        }
+    }else if(attacker->getOwner() == tileOwner::two){
+        if(game->getTurn() == PlayerTurn::two){
+            int targetIndex = P1_heros.indexOf(Target);
+            int attackerIndex = P2_heros.indexOf(attacker);
+
+
+
+            if(attacker->getAttackPower() > Target->getAttackPower()){
+                //attacker has More Power
+
+                attacker->setPos(Target->pos());
+                P2_heros[targetIndex] = attacker;
+                P2_heros[attackerIndex] = NULL;
+
+                game->scene_->removeItem(P1_heros[targetIndex]);
+                delete Target;
+                P1_heros[targetIndex] = NULL;
+
+                attacker->setAttackedTrue();
+
+            }else if(attacker->getAttackPower() < Target->getAttackPower()){
+                // Target has more Power
+                game->scene_->removeItem(P2_heros[attackerIndex]);
+                P2_heros[attackerIndex] = NULL;
+
+
+            }else{
+                // Equal Power
+                game->scene_->removeItem(P2_heros[attackerIndex]);
+                game->scene_->removeItem(P1_heros[targetIndex]);
+
+                P1_heros[targetIndex] = NULL;
+                P2_heros[attackerIndex] = NULL;
+
+            }
+
+        }else{
+            qDebug() << "\nYou Cannot Attack with your Opponents heroes!";
+
+        }
+    }
+
+
+}
+
+
+/**
+ * @brief Board::SpawnReset after hero tile leaves spwan, this function resets its tilestate back to Spawn state
+ */
+void Board::SpawnReset(){
     for(int i = 0; i < 4; i++){
         if(P1_heros[i] == NULL){
             boardContainer[i]->setState(state::spawn_p1);
@@ -210,14 +357,25 @@ void Board::SpwanReset(){
 }
 
 
+/**
+ * @brief Board::CapturedCaltapult checks who is in the caltapult tile
+ * @return the player who controls the caltapult tile
+ */
 PlayerTurn Board::CapturedCaltapult(){
     if(P1_heros[23] != NULL){
         return PlayerTurn::one;
     }else if(P2_heros[23] != NULL){
         return PlayerTurn::two;
+    }else{
+        return PlayerTurn::none;
     }
 }
 
+/**
+ * @brief Board::getResourceCount calcuates the ammount of extra gold to be given to a player
+ * @param whos which player is trying to check
+ * @return the ammount of bonus gold
+ */
 int Board::getResourceCount(PlayerTurn whos){
 
     int out = 0;
@@ -259,6 +417,13 @@ int Board::getResourceCount(PlayerTurn whos){
     }
     return out;
 }
+
+/**
+ * @brief Board::makeTileColumn makes one column of the board based on paramater
+ * @param x location
+ * @param y location
+ * @param row ammount of tiles to make
+ */
 void Board::makeTileColumn(int x, int y, int row)
 {
     double yOffset;

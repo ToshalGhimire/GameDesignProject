@@ -2,6 +2,10 @@
 #include "board.h"
 #include "game.h"
 
+/**
+ * @brief Game::Game main class, sets window and scene size
+ * @param parent
+ */
 Game::Game(QWidget *parent)
 {
    //set screen
@@ -16,6 +20,9 @@ Game::Game(QWidget *parent)
    //Music = new QMediaPlayer(); MUSIC
 }
 
+/**
+ * @brief Game::Start the first thing players see after hitting play in the program, has many button
+ */
 void Game::Start()
 {
     //Music->pause(); MUSIC
@@ -45,7 +52,7 @@ void Game::Start()
 
     //End Turn button
     Button * EndTurnButton = new Button(QString("End Turn"));
-//    EndTurnButton->setPos(1250,700);
+    EndTurnButton->setTextPos(18,0);
     EndTurnButton->setPos(541,935);
     scene_->addItem(EndTurnButton);
     connect(EndTurnButton,SIGNAL(clicked()),this,SLOT(EndTurn()));
@@ -53,13 +60,13 @@ void Game::Start()
     //Draw Button
     Button * drawButton = new Button(QString("Draw"));
     drawButton->setPos(304,935);
-//    drawButton->setPos(1025,700);
     connect(drawButton,SIGNAL(clicked()),this,SLOT(draw()));
     scene_->addItem(drawButton);
 
     //Summon Button
     Button * summonButton = new Button(QString("Summon"));
     summonButton->setPos(67,935);
+    summonButton->setTextPos(18,0);
     connect(summonButton,SIGNAL(clicked()),this,SLOT(Summon()));
     scene_->addItem(summonButton);
 
@@ -73,6 +80,9 @@ void Game::Start()
     scene_->addItem(item);
 }
 
+/**
+ * @brief Game::displayScoreBoard this is the user feedback after hiting play, shows whos turn, gold count, and player health left
+ */
 void Game::displayScoreBoard(){
 
     QString p1 = player_one->GetHealthInfo();
@@ -142,18 +152,41 @@ void Game::displayScoreBoard(){
     scoreBoard_1->setPos(4, 230);
     scoreBoard_2->setPos(800, 230);
     goldCount_->setPos(780, -8);
-//    scoreBoard_->setPos(325, -50);
-//    goldCount_->setPos(610,-50);
 
-    //scene_->addText(turnString);
 }
 
+/**
+ * @brief Game::MinusPlayerHealth subtracts the player heath based on paramater
+ * @param who which player
+ * @param index which health
+ * @param amount ammount to decrease
+ */
+void Game::MinusPlayerHealth(int who, int index, int amount)
+{
+    if(who == 1){
+       player_one->MinusHealth(index,amount);
+       return;
+    }
+
+    if(who == 2){
+        player_two->MinusHealth(index,amount);
+        return;
+    }
+
+}
+
+/**
+ * @brief Game::BackToMain clears scene and goes to mainmenu
+ */
 void Game::BackToMain()
 {
     scene_->clear();
     MainMenu();
 }
 
+/**
+ * @brief Game::About bunch of text for about page
+ */
 void Game::About()
 {
    scene_->clear();
@@ -180,6 +213,11 @@ void Game::About()
 
 }
 
+/**
+ * @brief strify helper function to turn enum class PlayerTurn into QString
+ * @param n PlayerTurn enum
+ * @return QString
+ */
 QString strify(PlayerTurn n){
     switch (n){
     case PlayerTurn::none:
@@ -195,6 +233,9 @@ QString strify(PlayerTurn n){
     }
 }
 
+/**
+ * @brief Game::EndTurn resets alot of player functions after player hits end turn, also handles health loss logic
+ */
 void Game::EndTurn()
 {
     qDebug() << "\nTurn Has Ended!\n==================";
@@ -204,9 +245,11 @@ void Game::EndTurn()
     if(turn == PlayerTurn::one){
        turn = PlayerTurn::two;
        player_two->PlusGold(1);
+
     } else if(turn == PlayerTurn::two){
        turn = PlayerTurn::one;
        player_one->PlusGold(1);
+
     }
 
     scene_->removeItem(scoreBoard_1);
@@ -219,10 +262,13 @@ void Game::EndTurn()
     for(int i = 0; i < tempBoard.P1_heros.size(); i++){
         if(tempBoard.P1_heros[i] != NULL){
             tempBoard.P1_heros[i]->setMovedFalse();
+            tempBoard.P1_heros[i]->setAttackedFalse();
         }
 
         if(tempBoard.P2_heros[i] != NULL){
             tempBoard.P2_heros[i]->setMovedFalse();
+            tempBoard.P2_heros[i]->setAttackedFalse();
+
         }
 
     }
@@ -233,16 +279,67 @@ void Game::EndTurn()
         player_two->PlusGold(tempBoard.getResourceCount(turn));
     }
 
+     updateSpawnHealth();
 
-    if(tempBoard.CapturedCaltapult() == PlayerTurn::one){
+    if(tempBoard.CapturedCaltapult() == PlayerTurn::one && turn == PlayerTurn::two){
         player_two->CatapultHit();
-    }else if(tempBoard.CapturedCaltapult() == PlayerTurn::two) {
+    }else if(tempBoard.CapturedCaltapult() == PlayerTurn::two && turn == PlayerTurn::one) {
         player_one->CatapultHit();
     }
+
+
+
     Card::clearClickedItem();
+    Tile::RemoveButtons();
+    Tile::clearClickedItems();
 
 }
 
+/**
+ * @brief Game::updateSpawnHealth if health goes to zero removes spawn from the board
+ */
+void Game::updateSpawnHealth(){
+    Board& tempBoard = Board::getInstance();
+
+    if(player_one->GetHealth()[0] < 1) {
+        tempBoard.boardContainer[0]->setState(state::empty);
+        scene_->removeItem(tempBoard.boardContainer[0]);
+    }
+    if(player_one->GetHealth()[1] < 1) {
+        tempBoard.boardContainer[1]->setState(state::empty);
+        scene_->removeItem(tempBoard.boardContainer[1]);
+    }
+    if(player_one->GetHealth()[2] < 1) {
+        tempBoard.boardContainer[2]->setState(state::empty);
+        scene_->removeItem(tempBoard.boardContainer[2]);
+    }
+    if(player_one->GetHealth()[3] < 1) {
+        tempBoard.boardContainer[3]->setState(state::empty);
+        scene_->removeItem(tempBoard.boardContainer[3]);
+    }
+
+    //player two
+    if(player_two->GetHealth()[0] < 1) {
+        tempBoard.boardContainer[43]->setState(state::empty);
+        scene_->removeItem(tempBoard.boardContainer[43]);
+    }
+    if(player_two->GetHealth()[1] < 1) {
+        tempBoard.boardContainer[44]->setState(state::empty);
+        scene_->removeItem(tempBoard.boardContainer[44]);
+    }
+    if(player_two->GetHealth()[2] < 1) {
+        tempBoard.boardContainer[45]->setState(state::empty);
+        scene_->removeItem(tempBoard.boardContainer[45]);
+    }
+    if(player_two->GetHealth()[3] < 1) {
+        tempBoard.boardContainer[46]->setState(state::empty);
+        scene_->removeItem(tempBoard.boardContainer[46]);
+    }
+}
+
+/**
+ * @brief Game::Summon higher level handling of the summoning of cards
+ */
 void Game::Summon(){
     if(Card::GetClickedItem() == NULL){
             qDebug() << "Please Select Card First!";
@@ -350,6 +447,9 @@ void Game::Summon(){
 }
 
 qreal yy = 0;
+/**
+ * @brief Game::draw drawing from the deck and puting it in the scene
+ */
 void Game::draw()
 {
 
@@ -378,24 +478,6 @@ void Game::draw()
         }
     }
 
-//    xx += 158;
-
-//    if(xx >= 1350){
-//        xx = -430;
-//        yy += 220;
-//    }
-
-//    for(Card * i : hand){
-
-
-
-
-
-//        scene_->addItem(i);
-//    }
-
-    //testDeck->displayDeck();
-
 }
 
 void Game::Test()
@@ -415,11 +497,13 @@ void Game::Test()
 
 
 }
-
+/**
+ * @brief Game::MainMenu first screen that is scene, has bunch of buttons in it
+ */
 void Game::MainMenu()
 {
 
-//MUSIC
+//MUSIC Implemented but not used
 //    if(Music->state() == QMediaPlayer::PlayingState){
 //        Music->play();
 //    }else{
@@ -467,7 +551,7 @@ void Game::MainMenu()
    scene_->addItem(ExitButton);
 
    //Test button
-   Button * TestButton = new Button(QString("Test Code"));
+   Button * TestButton = new Button(QString("Test"));
    int TestPos_X = this->width()/2 - title->boundingRect().width()/2;
    int TestPos_Y = 480;
    TestButton->setPos(TestPos_X,TestPos_Y);
